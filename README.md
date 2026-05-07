@@ -106,34 +106,15 @@ start.ps1        Launcher local Windows
 
 ---
 
-## Deploy (cloud)
+## Deploy
 
-### Frontend → Vercel
+Auto-deploy desde GitHub. Cada `git push origin main` despliega frontend (Vercel) + backend (Railway) en paralelo. **Cero scripts locales**.
 
-El proyecto ya está enlazado (`frontend/.vercel/project.json` local, no committeado).
+Setup completo + variables + troubleshooting → ver [DEPLOY.md](DEPLOY.md).
 
-**Recomendado: auto-deploy desde GitHub.** Conecta el repo en el dashboard de Vercel:
-- Project Settings → Git → conectar a `llevadot11/prova1_claude`
-- Root Directory: `frontend`
-- Build: `npm run build` · Output: `dist`
-- Env var: `VITE_API_BASE_URL` = URL pública de Railway
-
-Una vez conectado, **cada push a `main` despliega automáticamente**. No hace falta correr nada local.
-
-### Backend → Railway
-
-Railway lee `Dockerfile` raíz + `devops/infra/railway.json`.
-
-**Recomendado: auto-deploy desde GitHub.** En el dashboard de Railway:
-- New Project → Deploy from GitHub repo → `llevadot11/prova1_claude`
-- Variables → `ANTHROPIC_API_KEY`, `CORS_ORIGINS=https://<tu-vercel-url>`
-- Settings → Generate Domain
-
-Cada push a `main` redespliega.
-
-### Datos en la imagen Railway
-
-El `Dockerfile` raíz copia `data/processed/{barrios.geojson, tramos.geojson, mapping_barrios.csv, ufi_latest.parquet}` dentro de la imagen. Si regeneras el Parquet (`python -m ml.score`), tienes que **committear esos 4 archivos** y pushear para que Railway los incluya en el siguiente build.
+URLs producción:
+- Frontend: https://ufi-bcn.vercel.app
+- Backend: `https://<railway-domain>.up.railway.app`
 
 ---
 
